@@ -8,6 +8,7 @@ class ActivityStore {
   @observable selectedActivity: IActivity | null;
   @observable loadingInitial = false;
   @observable editMode = false;
+  @observable title = "Hello from Mobx!";
 
   @action loadActivities = () => {
     this.loadingInitial = true;

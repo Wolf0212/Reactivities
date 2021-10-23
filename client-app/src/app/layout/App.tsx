@@ -4,10 +4,11 @@ import { IActivity } from "../modules/activity";
 import { NavBar } from "../../features/nav/NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import agent from "../api/agent";
-import { LoadingComponent } from "../layout/LoadingComponent";
 import axios from "axios";
+import ActivityStore from "../stores/activityStore";
 
 const App = () => {
+  const activityStore = useContext(ActivityStore);
   const [activities, setActivities] = useState<IActivity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
   const [editMode, setEditMode] = useState(false);
