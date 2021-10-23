@@ -5,11 +5,9 @@ import { NavBar } from "../../features/nav/NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import agent from "../api/agent";
 import { LoadingComponent } from "../layout/LoadingComponent";
-import ActivityStore from "../stores/activityStore";
-import { observer } from "mobx-react-lite";
+import axios from "axios";
 
 const App = () => {
-  const activityStore = useContext(ActivityStore);
   const [activities, setActivities] = useState<IActivity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -53,17 +51,24 @@ const App = () => {
   }
 
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
-
-  if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities...' />
+    axios.get<IActivity[]>('http://localhost:5000/api/activities').then(response => {
+      let activities: IActivity[] = [];
+      response.data.forEach(activity => {
+        activity.date = activity.date.split('.')[0];
+        activities.push(activity);
+      })
+      setTimeout(() => {
+        setActivities(activities)
+      }, 1000);
+    })
+  }, []);
 
   return (
     <div id="main-container">
       <NavBar openCreateForm={handleOpenForm} />
       <Container style={{ marginTop: "6em" }}>
         <ActivityDashboard
-          activities={activityStore.activities}
+          activities={activities}
           selectActivity={handleSelectActivity}
           selectedActivity={selectedActivity!}
           editMode={editMode} setEditMode={setEditMode}
@@ -79,4 +84,4 @@ const App = () => {
   );
 };
 
-export default observer(App);
+export default App;
