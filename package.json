@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "semantic-ui-react": "^2.0.4"
+  }
+}
