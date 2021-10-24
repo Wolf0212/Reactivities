@@ -1,28 +1,30 @@
-import { useEffect, useContext } from "react";
+import { Fragment } from "react";
 import { Container } from "semantic-ui-react";
 import NavBar from "../../features/nav/NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
-import ActivityStore from "../stores/activityStore";
-import { LoadingComponent } from "./LoadingComponent";
 import { observer } from "mobx-react-lite";
+import { Route, RouteComponentProps, withRouter } from "react-router-dom";
+import ActivityForm from "../../features/activities/form/ActivityForm";
+import ActivityDetails from "../../features/activities/details/ActivityDetails";
+import HomePage from "../../features/home/HomePage";
 
-const App = () => {
-  const activityStore = useContext(ActivityStore);
-
-  useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
-
-  if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities' />;
+const App: React.FC<RouteComponentProps> = ({ location }) => {
 
   return (
-    <div id="main-container">
-      <NavBar />
-      <Container style={{ marginTop: "6em" }}>
-        <ActivityDashboard />
-      </Container>
-    </div>
+    <Fragment>
+      <Route exact path='/' component={HomePage} />
+      <Route path={'/(.+)'} render={() => (
+        <Fragment>
+          <NavBar />
+          <Container style={{ marginTop: "6em" }}>
+            <Route exact path='/activities' component={ActivityDashboard} />
+            <Route path='/activities/:id' component={ActivityDetails} />
+            <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+          </Container>
+        </Fragment>
+      )} />
+    </Fragment>
   );
 };
 
-export default observer(App);
+export default withRouter(observer(App));
