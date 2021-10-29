@@ -86,11 +86,10 @@ class ActivityStore {
           this.loadingInitial = false;
         });
       } catch (err) {
-        console.log(err);
         runInAction(() => {
-          this.activity = activity;
           this.loadingInitial = false;
         });
+        console.log(err);
       }
     }
   };

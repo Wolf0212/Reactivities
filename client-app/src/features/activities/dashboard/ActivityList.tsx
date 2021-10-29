@@ -7,6 +7,10 @@ import { ActivityListItem } from "./ActivityListItem";
 const ActivityList: React.FC = () => {
   const activityStore = useContext(ActivityStore);
   const { activitiesByDate } = activityStore;
+  const testCss = {
+    marginTop: '1em'
+  }
+
   return (
 
     <Fragment>
@@ -16,7 +20,7 @@ const ActivityList: React.FC = () => {
             <Label color='blue' size='large'>
               {group}
             </Label>
-            <Item.Group divided>
+            <Item.Group divided style={testCss}>
               {activities.map((activity) => (
                 <ActivityListItem key={activity.id} activity={activity} />
               ))}
